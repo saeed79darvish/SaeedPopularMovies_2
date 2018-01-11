@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Movie;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.saeed.saeedpopularmovies_2.Adapters.MovieAdapter;
+import com.example.saeed.saeedpopularmovies_2.Models.Movie;
 import com.example.saeed.saeedpopularmovies_2.Models.MovieResponse;
 import com.example.saeed.saeedpopularmovies_2.REST.APIService;
 

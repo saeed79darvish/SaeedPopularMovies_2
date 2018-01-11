@@ -3,7 +3,6 @@ package com.example.saeed.saeedpopularmovies_2;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -16,6 +15,7 @@ import android.view.MenuItem;
 
 import com.example.saeed.saeedpopularmovies_2.Adapters.MovieAdapter;
 import com.example.saeed.saeedpopularmovies_2.Data.MovieContract;
+import com.example.saeed.saeedpopularmovies_2.Models.Movie;
 
 import org.parceler.Parcels;
 

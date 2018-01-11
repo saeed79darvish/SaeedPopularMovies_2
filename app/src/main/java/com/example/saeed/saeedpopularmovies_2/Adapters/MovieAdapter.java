@@ -1,12 +1,13 @@
 package com.example.saeed.saeedpopularmovies_2.Adapters;
 
-import android.graphics.Movie;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.saeed.saeedpopularmovies_2.Models.Movie;
 import com.example.saeed.saeedpopularmovies_2.R;
 import com.example.saeed.saeedpopularmovies_2.REST.APIService;
 import com.squareup.picasso.Picasso;

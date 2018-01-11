@@ -11,8 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 public class MovieContentProvider extends ContentProvider {
-    private static final int MOVIE = 200;
-    private static final int MOVIE_WITH_ID = 201;
+    private static final int MOVIE = 100;
+    private static final int MOVIE_WITH_ID = 101;
     UriMatcher mUriMatcher = builUriMatcher();
     MovieDbHelper movieDbHelper;
 
