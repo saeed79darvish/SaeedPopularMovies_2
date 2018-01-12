@@ -11,23 +11,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 public class MovieContentProvider extends ContentProvider {
-    private static final int MOVIE = 100;
-    private static final int MOVIE_WITH_ID = 101;
-    UriMatcher mUriMatcher = builUriMatcher();
+    private static final int MOVIE = 200;
+    private static final int MOVIE_WITH_ID = 201;
+    UriMatcher mUriMatcher = builUriMatcher ();
     MovieDbHelper movieDbHelper;
 
     private UriMatcher builUriMatcher() {
-        UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(MovieContract.AUTHORITY, MovieContract.PATH, MOVIE);
-        uriMatcher.addURI(MovieContract.AUTHORITY, MovieContract.PATH + "/#", MOVIE_WITH_ID);
+        UriMatcher uriMatcher = new UriMatcher (UriMatcher.NO_MATCH);
+        uriMatcher.addURI (MovieContract.AUTHORITY, MovieContract.PATH, MOVIE);
+        uriMatcher.addURI (MovieContract.AUTHORITY, MovieContract.PATH + "/#", MOVIE_WITH_ID);
         return uriMatcher;
     }
 
     @Override
     public boolean onCreate() {
-
-        movieDbHelper = new MovieDbHelper(getContext());
-
+        movieDbHelper = new MovieDbHelper (getContext ());
         return true;
     }
 
@@ -35,10 +33,10 @@ public class MovieContentProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         Cursor cursor;
-        final SQLiteDatabase db = movieDbHelper.getReadableDatabase();
-        switch (mUriMatcher.match(uri)) {
+        final SQLiteDatabase db = movieDbHelper.getReadableDatabase ();
+        switch (mUriMatcher.match (uri)) {
             case MOVIE:
-                cursor = db.query(MovieContract.MovieEntry.TABLE_NAME,
+                cursor = db.query (MovieContract.MovieEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -47,19 +45,19 @@ public class MovieContentProvider extends ContentProvider {
                         sortOrder);
                 break;
             case MOVIE_WITH_ID:
-                cursor = db.query(MovieContract.MovieEntry.TABLE_NAME,
+                cursor = db.query (MovieContract.MovieEntry.TABLE_NAME,
                         projection,
                         MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?",
-                        new String[]{uri.getLastPathSegment()},
+                        new String[]{uri.getLastPathSegment ()},
                         null,
                         null,
                         sortOrder);
                 break;
             default:
-                throw new UnsupportedOperationException("Unsupported uri " + uri);
+                throw new UnsupportedOperationException ("Unsupported uri " + uri);
         }
         if (cursor != null) {
-            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+            cursor.setNotificationUri (getContext ().getContentResolver (), uri);
         }
         return cursor;
     }
@@ -74,58 +72,58 @@ public class MovieContentProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         Uri uri1;
-        final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
-        switch (mUriMatcher.match(uri)) {
+        final SQLiteDatabase db = movieDbHelper.getWritableDatabase ();
+        switch (mUriMatcher.match (uri)) {
             case MOVIE:
-                long id = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, values);
-                if (id != -1) uri1 = ContentUris.withAppendedId(uri, id);
-                else throw new UnsupportedOperationException("Unsupported Uri " + uri);
+                long id = db.insert (MovieContract.MovieEntry.TABLE_NAME, null, values);
+                if (id != -1) uri1 = ContentUris.withAppendedId (uri, id);
+                else throw new UnsupportedOperationException ("Unsupported Uri " + uri);
                 break;
             default:
-                throw new UnsupportedOperationException("Unsupported Uri " + uri);
+                throw new UnsupportedOperationException ("Unsupported Uri " + uri);
         }
-        if (uri1 != null) getContext().getContentResolver().notifyChange(uri, null);
-        db.close();
+        if (uri1 != null) getContext ().getContentResolver ().notifyChange (uri, null);
+        db.close ();
         return uri1;
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         int deleteRows = 0;
-        final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
-        switch (mUriMatcher.match(uri)) {
+        final SQLiteDatabase db = movieDbHelper.getWritableDatabase ();
+        switch (mUriMatcher.match (uri)) {
             case MOVIE_WITH_ID:
-                String movieId = uri.getLastPathSegment();
-                deleteRows = db.delete(MovieContract.MovieEntry.TABLE_NAME,
+                String movieId = uri.getLastPathSegment ();
+                deleteRows = db.delete (MovieContract.MovieEntry.TABLE_NAME,
                         MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?", new String[]{movieId});
                 break;
             case MOVIE:
-                deleteRows = db.delete(MovieContract.MovieEntry.TABLE_NAME, null, null);
+                deleteRows = db.delete (MovieContract.MovieEntry.TABLE_NAME, null, null);
                 break;
 
             default:
-                throw new UnsupportedOperationException("Unsupported URI " + uri);
+                throw new UnsupportedOperationException ("Unsupported URI " + uri);
         }
-        if (deleteRows > 0) getContext().getContentResolver().notifyChange(uri, null);
-        db.close();
+        if (deleteRows > 0) getContext ().getContentResolver ().notifyChange (uri, null);
+        db.close ();
         return deleteRows;
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
+        final SQLiteDatabase db = movieDbHelper.getWritableDatabase ();
         int updatedRows = 0;
-        switch (mUriMatcher.match(uri)) {
+        switch (mUriMatcher.match (uri)) {
             case MOVIE_WITH_ID:
-                updatedRows = db.update(MovieContract.MovieEntry.TABLE_NAME,
+                updatedRows = db.update (MovieContract.MovieEntry.TABLE_NAME,
                         values,
                         MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?",
-                        new String[]{uri.getLastPathSegment()});
+                        new String[]{uri.getLastPathSegment ()});
                 break;
             default:
-                throw new UnsupportedOperationException("Unsupported URI " + uri);
+                throw new UnsupportedOperationException ("Unsupported URI " + uri);
         }
-        if (updatedRows > 0) getContext().getContentResolver().notifyChange(uri, null);
+        if (updatedRows > 0) getContext ().getContentResolver ().notifyChange (uri, null);
 
         return updatedRows;
     }
@@ -133,29 +131,29 @@ public class MovieContentProvider extends ContentProvider {
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         int insertedRows = 0;
-        final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
-        switch (mUriMatcher.match(uri)) {
+        final SQLiteDatabase db = movieDbHelper.getWritableDatabase ();
+        switch (mUriMatcher.match (uri)) {
             case MOVIE:
-                db.beginTransaction();
+                db.beginTransaction ();
                 try {
                     for (ContentValues v : values) {
-                        long id = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, v);
+                        long id = db.insert (MovieContract.MovieEntry.TABLE_NAME, null, v);
                         if (id != -1) {
                             insertedRows++;
                         }
                     }
-                    db.setTransactionSuccessful();
+                    db.setTransactionSuccessful ();
                 } finally {
-                    db.endTransaction();
+                    db.endTransaction ();
                 }
                 break;
             default:
-                throw new UnsupportedOperationException("Unsupported URI " + uri);
+                throw new UnsupportedOperationException ("Unsupported URI " + uri);
         }
         if (insertedRows > 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            getContext ().getContentResolver ().notifyChange (uri, null);
         }
-        db.close();
+        db.close ();
         return insertedRows;
     }
 

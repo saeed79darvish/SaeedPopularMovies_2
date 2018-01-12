@@ -89,7 +89,7 @@ public class DetailsActivity extends AppCompatActivity implements MovieTrailerAd
         reviewsRecyclerView = (RecyclerView) findViewById(R.id.rcv_reviews_list);
         movieReviewAdapter = new MovieReviewAdapter(this);
         reviewsRecyclerView.setHasFixedSize(true);
-        reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        reviewsRecyclerView.setLayoutManager(new LinearLayoutManager (this));
         reviewsRecyclerView.setAdapter(movieReviewAdapter);
 
         trailersRecyclerView = (RecyclerView) findViewById(R.id.rcv_trailers_list);
@@ -116,7 +116,7 @@ public class DetailsActivity extends AppCompatActivity implements MovieTrailerAd
                 .build();
         APIService service = retrofit.create(APIService.class);
         Call<TrailerResponse> call = service.getMovieTrailers(movieId, APIService.API_KEY);
-        call.enqueue(new Callback<TrailerResponse>() {
+        call.enqueue(new Callback<TrailerResponse> () {
             @Override
             public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
                 detailsBinding.pbTrailersLoading.setVisibility(View.INVISIBLE);
@@ -140,6 +140,7 @@ public class DetailsActivity extends AppCompatActivity implements MovieTrailerAd
         });
 
     }
+
 
     private void fetchReviews(String movieId) {
         detailsBinding.pbReviewsLoading.setVisibility(View.VISIBLE);
@@ -174,8 +175,6 @@ public class DetailsActivity extends AppCompatActivity implements MovieTrailerAd
         });
     }
 
-    /*
-    * Updated the UI based on Movie object data*/
     private void updateUi(Movie movieInfo) {
         detailsBinding.tvMovieTitle.setText(movieInfo.getTitle());
         detailsBinding.tvMovieRating.setText(movieInfo.getVote_average());
@@ -198,6 +197,7 @@ public class DetailsActivity extends AppCompatActivity implements MovieTrailerAd
             val = 1;
             isFavorite = true;
         } else {
+
             val = 0;
             isFavorite = false;
         }
@@ -242,7 +242,7 @@ public class DetailsActivity extends AppCompatActivity implements MovieTrailerAd
 
     private void addMovieToDatabase(Movie movie) {
         ContentValues values = new ContentValues();
-        values.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId ());
+        values.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId());
         values.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, movie.getTitle());
         values.put(MovieContract.MovieEntry.COLUMN_MOVIE_OVERVIEW, movie.getOverview());
         values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPoster_path());

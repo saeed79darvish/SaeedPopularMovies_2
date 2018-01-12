@@ -19,45 +19,44 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
     private Context context;
 
     public MovieReviewAdapter(Context context) {
-        reviewList = new ArrayList<>();
+        reviewList = new ArrayList<> ();
         this.context = context;
     }
 
     public void setReviewList(List<Review> reviewList) {
         this.reviewList = reviewList;
-        this.notifyDataSetChanged();
+        this.notifyDataSetChanged ();
     }
 
     @Override
     public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.movie_review_item, parent, false);
-        return new ReviewViewHolder(v);
+        View v = LayoutInflater.from (context).inflate (R.layout.movie_review_item, parent, false);
+        return new ReviewViewHolder (v);
     }
 
     @Override
     public void onBindViewHolder(ReviewViewHolder holder, int position) {
-        holder.bind(reviewList.get(position).getAuthor(), reviewList.get(position).getContent());
+        holder.bind (reviewList.get (position).getAuthor (), reviewList.get (position).getContent ());
     }
 
     @Override
     public int getItemCount() {
-        return (reviewList != null)?reviewList.size():0;
+        return (reviewList != null) ? reviewList.size () : 0;
     }
-
 
     public class ReviewViewHolder extends RecyclerView.ViewHolder {
         TextView authorTextView;
         ExpandableTextView expTv1;
 
         public ReviewViewHolder(View itemView) {
-            super(itemView);
-            authorTextView = (TextView) itemView.findViewById(R.id.tv_review_author);
-            expTv1 = (ExpandableTextView) itemView.findViewById(R.id.expand_text_view);
+            super (itemView);
+            authorTextView = (TextView) itemView.findViewById (R.id.tv_review_author);
+            expTv1 = (ExpandableTextView) itemView.findViewById (R.id.expand_text_view);
         }
 
         public void bind(String author, String content) {
-            authorTextView.setText(author);
-            expTv1.setText(content);
+            authorTextView.setText (author);
+            expTv1.setText (content);
         }
     }
 }

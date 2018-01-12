@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -19,15 +20,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailsActivity" />
+        <activity
+            android:name=".DetailsActivity"
+            android:label="@string/title_activity_movie_details"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity android:name=".FavouriteMoviesActivity"></activity>
 
         <provider
             android:name=".Data.MovieContentProvider"
             android:authorities="@string/content_authority"
             android:exported="false" />
-
-
     </application>
 
 </manifest>

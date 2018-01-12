@@ -18,32 +18,33 @@ public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapte
     private ItemClickListener itemClickListener;
     private Context context;
     private List<Trailer> trailerList;
+
     public MovieTrailerAdapter(Context context) {
         this.context = context;
         itemClickListener = (ItemClickListener) context;
-        trailerList = new ArrayList<>();
+        trailerList = new ArrayList<> ();
     }
 
     public void setTrailerList(List<Trailer> trailerList) {
         this.trailerList = trailerList;
-        this.notifyDataSetChanged();
+        this.notifyDataSetChanged ();
 
     }
 
     @Override
     public TrailerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.movie_trailer_item, parent, false);
-        return new TrailerViewHolder(v);
+        View v = LayoutInflater.from (context).inflate (R.layout.movie_trailer_item, parent, false);
+        return new TrailerViewHolder (v);
     }
 
     @Override
     public void onBindViewHolder(TrailerViewHolder holder, int position) {
-        holder.bind(trailerList.get(position).getSite(), trailerList.get(position).getName());
+        holder.bind (trailerList.get (position).getSite (), trailerList.get (position).getName ());
     }
 
     @Override
     public int getItemCount() {
-        return (trailerList != null)?trailerList.size():0;
+        return (trailerList != null) ? trailerList.size () : 0;
     }
 
     public interface ItemClickListener {
@@ -54,20 +55,20 @@ public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapte
         TextView siteTextView, nameTextView;
 
         public TrailerViewHolder(View itemView) {
-            super(itemView);
-            siteTextView = (TextView) itemView.findViewById(R.id.tv_trailer_site);
-            nameTextView = (TextView) itemView.findViewById(R.id.tv_trailer_name);
-            itemView.setOnClickListener(this);
+            super (itemView);
+            siteTextView = (TextView) itemView.findViewById (R.id.tv_trailer_site);
+            nameTextView = (TextView) itemView.findViewById (R.id.tv_trailer_name);
+            itemView.setOnClickListener (this);
         }
 
         public void bind(String site, String name) {
-            siteTextView.setText(site);
-            nameTextView.setText(name);
+            siteTextView.setText (site);
+            nameTextView.setText (name);
         }
 
         @Override
         public void onClick(View v) {
-            itemClickListener.onItemClick(trailerList.get(getAdapterPosition()).getKey());
+            itemClickListener.onItemClick (trailerList.get (getAdapterPosition ()).getKey ());
         }
     }
 }

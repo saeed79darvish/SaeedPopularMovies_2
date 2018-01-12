@@ -16,30 +16,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemViewHolder> {
-    private final static String TAG = MovieAdapter.class.getSimpleName();
+
+    private final static String TAG = MovieAdapter.class.getSimpleName ();
     private List<Movie> mMovieList;
     private ItemClickHandler itemClickHandler;
+
     public MovieAdapter(ItemClickHandler itemClickHandler) {
         this.itemClickHandler = itemClickHandler;
-        mMovieList = new ArrayList<Movie>();
+        mMovieList = new ArrayList<Movie> ();
     }
 
     @Override
     public MovieItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_item, parent, false);
-        return new MovieItemViewHolder(v);
+        View v = LayoutInflater.from (parent.getContext ()).inflate (R.layout.movie_item, parent, false);
+        return new MovieItemViewHolder (v);
     }
 
     @Override
     public void onBindViewHolder(MovieItemViewHolder holder, int position) {
-        holder.bind(getMovieList().get(position));
+        holder.bind (getMovieList ().get (position));
     }
 
     @Override
     public int getItemCount() {
-        return (mMovieList != null) ? mMovieList.size() : 0;
+        return (mMovieList != null) ? mMovieList.size () : 0;
     }
 
     private List<Movie> getMovieList() {
@@ -48,7 +49,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemVie
 
     public void setmMovieList(List<Movie> mMovieList) {
         this.mMovieList = mMovieList;
-        notifyDataSetChanged();
+        notifyDataSetChanged ();
     }
 
     public interface ItemClickHandler {
@@ -59,21 +60,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieItemVie
         ImageView movieItemImageView;
 
         public MovieItemViewHolder(View itemView) {
-            super(itemView);
-            movieItemImageView = (ImageView) itemView.findViewById(R.id.imv_movie_item);
-            itemView.setOnClickListener(this);
+            super (itemView);
+            movieItemImageView = (ImageView) itemView.findViewById (R.id.imv_movie_item);
+            itemView.setOnClickListener (this);
         }
 
         void bind(Movie movie) {
-            Picasso.with(itemView.getContext())
-                    .load(APIService.IMAGE_URL+movie.getPoster_path())
-                    .placeholder(R.drawable.placeholdercinema)
-                    .into(movieItemImageView);
+            Picasso.with (itemView.getContext ())
+                    .load (APIService.IMAGE_URL + movie.getPoster_path ())
+                    .placeholder (R.drawable.loading)
+                    .into (movieItemImageView);
         }
 
         @Override
         public void onClick(View v) {
-            itemClickHandler.onItemClick(mMovieList.get(getAdapterPosition()));
+            itemClickHandler.onItemClick (mMovieList.get (getAdapterPosition ()));
         }
     }
 }

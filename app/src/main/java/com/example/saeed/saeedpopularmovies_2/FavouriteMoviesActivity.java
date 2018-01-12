@@ -40,14 +40,15 @@ public class FavouriteMoviesActivity extends AppCompatActivity implements Loader
 
         recyclerView = (RecyclerView) findViewById(R.id.rcv_favourite_movies_list);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,
+        recyclerView.setLayoutManager(new GridLayoutManager (this,
                 (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) ? 2 : 4));
 
         mMoviesAdapter = new MovieAdapter(this);
 
         recyclerView.setAdapter(mMoviesAdapter);
 
-
+        //When device configuration changes populate rcv with persisted data source
+        //else fetch data from database
         if (savedInstanceState != null) {
             mMovieList = Parcels.unwrap(savedInstanceState.getParcelable(MOVIES_STATE_KEY));
             mMoviesAdapter.setmMovieList(mMovieList);
@@ -74,10 +75,9 @@ public class FavouriteMoviesActivity extends AppCompatActivity implements Loader
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this,
+        return new CursorLoader (this,
                 MovieContract.MovieEntry.CONTENT_URI,
                 null,
                 MovieContract.MovieEntry.COLUMN_MOVIE_IS_FAV + "=?",
@@ -99,7 +99,7 @@ public class FavouriteMoviesActivity extends AppCompatActivity implements Loader
 
     private List<Movie> parseCursor(Cursor cursor) {
         if (cursor == null) return null;
-        List<Movie> movieList = new ArrayList<>();
+        List<Movie> movieList = new ArrayList<> ();
         while (cursor.moveToNext()) {
             Movie movie = new Movie();
             Log.d(TAG, "parseCursor: " + cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE)));

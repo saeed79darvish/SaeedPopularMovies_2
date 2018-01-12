@@ -36,7 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ItemClickHandler {
 
     private static final String EXTRA_OBJECT = "movie-object";
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName ();
     private static final String MOVIES_STATE_KEY = "movies_list";
 
     private static final String SORT_KEY = "sort_key";
@@ -47,182 +47,170 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Item
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private MovieAdapter mMoviesAdapter;
-    private List<com.example.saeed.saeedpopularmovies_2.Models.Movie> mMovieList;
+    private List<Movie> mMovieList;
     private String sortType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mProgressBar = (ProgressBar) findViewById(R.id.pb_loading);
+        super.onCreate (savedInstanceState);
+        setContentView (R.layout.activity_main);
+        mProgressBar = (ProgressBar) findViewById (R.id.pb_loading);
 
-        //setup recycler view
-        mRecyclerView = (RecyclerView) findViewById(R.id.rcv_movie_list);
-        mRecyclerView.setHasFixedSize(true);
 
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) ? 2 : 4));
+        mRecyclerView = (RecyclerView) findViewById (R.id.rcv_movie_list);
+        mRecyclerView.setHasFixedSize (true);
 
-        mMoviesAdapter = new MovieAdapter(MainActivity.this);
-        mRecyclerView.setAdapter(mMoviesAdapter);
+        mRecyclerView.setLayoutManager (new GridLayoutManager (this, (getResources ().getConfiguration ().orientation == Configuration.ORIENTATION_PORTRAIT) ? 2 : 4));
 
-        //Shared perefrence to store sort type i.e fetch last sorted list
-        sortType = getSharedPreferences(SHARED_PREFERENCE_KEY, 0).getString(SORT_KEY, POPULAR);
+        mMoviesAdapter = new MovieAdapter (MainActivity.this);
+        mRecyclerView.setAdapter (mMoviesAdapter);
 
-        //when deviec configuration changes set adapted data source to persisted movieList
+        sortType = getSharedPreferences (SHARED_PREFERENCE_KEY, 0).getString (SORT_KEY, POPULAR);
+
         if (savedInstanceState != null) {
-            mMovieList = Parcels.unwrap(savedInstanceState.getParcelable(MOVIES_STATE_KEY));
-            mMoviesAdapter.setmMovieList(mMovieList);
+            mMovieList = Parcels.unwrap (savedInstanceState.getParcelable (MOVIES_STATE_KEY));
+            mMoviesAdapter.setmMovieList (mMovieList);
 
         } else {
-            // if device is connected to internet
-            if (isOnline())
-                fetchMovies(sortType);
+
+            if (isOnline ())
+                fetchMovies (sortType);
             else
-                //if device offline show AlertDialog
-                new AlertDialog.Builder(this).setTitle(R.string.error_connectivity_title).setMessage(R.string.error_connectivity_message)
-                        .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+
+                new AlertDialog.Builder (this).setTitle (R.string.error_connectivity_title).setMessage (R.string.error_connectivity_message)
+                        .setPositiveButton ("Exit", new DialogInterface.OnClickListener () {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                System.exit(0);
+                                System.exit (0);
                             }
-                        }).show();
+                        }).show ();
         }
 
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
+        super.onResume ();
     }
 
 
     //persist movieList
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(MOVIES_STATE_KEY, Parcels.wrap(mMovieList));
+        super.onSaveInstanceState (outState);
+        outState.putParcelable (MOVIES_STATE_KEY, Parcels.wrap (mMovieList));
     }
-    /*
-    * Checks whether device is connected to internet or not
-    * */
+
     public boolean isOnline() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService (CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo ();
+        return (networkInfo != null && networkInfo.isConnected ());
     }
 
     public void showProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility (View.VISIBLE);
+        mRecyclerView.setVisibility (View.INVISIBLE);
     }
 
     public void hideProgressBar() {
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility (View.INVISIBLE);
+        mRecyclerView.setVisibility (View.VISIBLE);
     }
 
-    /*
-    * fetch movie based on sort type
-    * and create movies list
-    * @param sortType -> Popular or Top Rated
-    * @returns List<Movie>
-    * */
-    private void fetchMovies(String sortType) {
-        showProgressBar();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(APIService.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        APIService service = retrofit.create(APIService.class);
-        Call<MovieResponse> call = service.getMoviesData(sortType, APIService.API_KEY);
-        call.enqueue(new Callback<MovieResponse>() {
+    private void fetchMovies(String sortType) {
+        showProgressBar ();
+        Retrofit retrofit = new Retrofit.Builder ()
+                .baseUrl (APIService.BASE_URL)
+                .addConverterFactory (GsonConverterFactory.create ())
+                .build ();
+
+        APIService service = retrofit.create (APIService.class);
+        Call<MovieResponse> call = service.getMoviesData (sortType, APIService.API_KEY);
+        call.enqueue (new Callback<MovieResponse> () {
             @Override
             public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
-                if (response.isSuccessful()) {
-                    mMovieList = response.body().getMovieList();
-                    if (mMovieList == null || mMovieList.size() == 0) return;
-                    mMoviesAdapter.setmMovieList(mMovieList);
-                    hideProgressBar();
+                if (response.isSuccessful ()) {
+                    mMovieList = response.body ().getMovieList ();
+                    if (mMovieList == null || mMovieList.size () == 0) return;
+                    mMoviesAdapter.setmMovieList (mMovieList);
+                    hideProgressBar ();
                 }
-                if (!response.isSuccessful()) {
-                    new AlertDialog.Builder(MainActivity.this)
-                            .setTitle(R.string.response_error)
-                            .setMessage(response.message() + "\nResponse Code : " + response.code())
-                            .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                if (!response.isSuccessful ()) {
+                    new AlertDialog.Builder (MainActivity.this)
+                            .setTitle (R.string.response_error)
+                            .setMessage (response.message () + "\nResponse Code : " + response.code ())
+                            .setPositiveButton ("Exit", new DialogInterface.OnClickListener () {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    System.exit(0);
+                                    System.exit (0);
                                 }
                             })
-                            .show();
-                    hideProgressBar();
+                            .show ();
+                    hideProgressBar ();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
-                Toast.makeText(MainActivity.this, R.string.response_failure, Toast.LENGTH_SHORT).show();
-                hideProgressBar();
+                Toast.makeText (MainActivity.this, R.string.response_failure, Toast.LENGTH_SHORT).show ();
+                hideProgressBar ();
             }
         });
     }
-    /*
-    * Callback interface
-    * Invoked when movie item from rcv is clicked to start DetailsActivity and pass in movie object as a parcel
-    * */
+
     @Override
     public void onItemClick(Movie movie) {
-        Intent i = new Intent(MainActivity.this, DetailsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(EXTRA_OBJECT, Parcels.wrap(movie));
-        i.putExtras(bundle);
-        startActivity(i);
+        Intent i = new Intent (MainActivity.this, DetailsActivity.class);
+        Bundle bundle = new Bundle ();
+        bundle.putParcelable (EXTRA_OBJECT, Parcels.wrap (movie));
+        i.putExtras (bundle);
+        startActivity (i);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        //set menu item title based on sort key
-        if (sortType.equals(TOP_RATED)) {
-            menu.getItem(0).setTitle(getResources().getString(R.string.action_sort_popular));
+        getMenuInflater ().inflate (R.menu.main, menu);
+
+        if (sortType.equals (TOP_RATED)) {
+            menu.getItem (0).setTitle (getResources ().getString (R.string.action_sort_popular));
         } else {
-            menu.getItem(0).setTitle(getResources().getString(R.string.action_sort_top_rated));
+            menu.getItem (0).setTitle (getResources ().getString (R.string.action_sort_top_rated));
         }
-        return super.onCreateOptionsMenu(menu);
+        return super.onCreateOptionsMenu (menu);
     }
-    //update sort key when sort type is changed
+
     private void updateSortKey() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_KEY, 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(SORT_KEY, sortType);
-        editor.apply();
+        SharedPreferences sharedPreferences = getSharedPreferences (SHARED_PREFERENCE_KEY, 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit ();
+        editor.putString (SORT_KEY, sortType);
+        editor.apply ();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //fetch movies list based on selected sort ket and persist sort key and update menu item text
-        switch (item.getItemId()) {
+
+        switch (item.getItemId ()) {
             case R.id.action_sort:
-                if (sortType.equals(TOP_RATED)) {
+                if (sortType.equals (TOP_RATED)) {
                     sortType = POPULAR;
-                    fetchMovies(sortType);
-                    mMoviesAdapter.notifyDataSetChanged();
-                    item.setTitle(getResources().getString(R.string.action_sort_top_rated));
+                    fetchMovies (sortType);
+                    mMoviesAdapter.notifyDataSetChanged ();
+                    item.setTitle (getResources ().getString (R.string.action_sort_top_rated));
                 } else {
                     sortType = TOP_RATED;
-                    fetchMovies(sortType);
-                    mMoviesAdapter.notifyDataSetChanged();
-                    item.setTitle(getResources().getString(R.string.action_sort_popular));
+                    fetchMovies (sortType);
+                    mMoviesAdapter.notifyDataSetChanged ();
+                    item.setTitle (getResources ().getString (R.string.action_sort_popular));
                 }
-                updateSortKey();
+                updateSortKey ();
                 return true;
             case R.id.action_favourite_movies:
-                startActivity(new Intent(this, FavouriteMoviesActivity.class));
+                startActivity (new Intent (this, FavouriteMoviesActivity.class));
                 return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected (item);
     }
 
 }
